@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant User
+    participant Browser
+    participant Server
+
+    Note over User, Browser: El usuario escribe una nueva nota y hace clic en "Save" en la SPA
+
+    Browser->>Browser: La SPA añade la nueva nota localmente sin recargar la página
+
+    Browser->>Server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa { content: "Nueva nota", date: "2024-09-26" }
+    activate Server
+    Server-->>Browser: 201 Created (Confirma que la nota se ha guardado)
+    deactivate Server
+
+    Note right of Browser: La nota se añade a la lista en la interfaz sin recargar la página
+
+    Browser->>Server: GET https://studies.cs.helsinki.fi/exampleapp/data.json (opcional)
+    activate Server
+    Server-->>Browser: [{ "content": "Nota 1", "date": "2024-09-26" }, { "content": "Nueva nota", "date": "2024-09-26" }]
+    deactivate Server
+
+    Note right of Browser: La lista de notas se actualiza en la SPA en caso de haber cambios adicionales en los datos
